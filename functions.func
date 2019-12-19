@@ -1,0 +1,196 @@
+/*
+Functions can be found in this file.
+*/
+
+USERinitials()
+{
+	IniRead, Initials, data.dat, Initials, USER	; Sets the Users Initals
+    InputBox, USER, USERinitials Variable Changer, enter your initials here e.g. MB, , , 125,
+		if ErrorLevel {
+		MsgBox, Initials have been left as '%Initials%'
+		}
+			else {
+			IniWrite, %USER%, data.dat, Initials, USER
+			MsgBox, Your Initials have been saved and now the Hotkey app will reload
+			Reload
+			}
+return
+}
+
+TextBank1()
+{
+    InputBox, TextBank1, TextBank1 Variable Changer, enter the new text here, , , 125, 
+		if ErrorLevel {
+		MsgBox, TextBank1 not updated. 
+		}
+			else {
+			IniWrite, %TextBank1%, data.dat, UserText, TextBank1
+			MsgBox, This text has been saved and now the Hotkey app will reload
+			Reload
+			}
+return
+}
+
+TextBank2()
+{
+    InputBox, TextBank2, TextBank2 Variable Changer, enter the new text here, , , 125, 
+		if ErrorLevel {
+		MsgBox, TextBank2 not updated. 
+		}
+			else {
+			IniWrite, %TextBank2%, data.dat, UserText, TextBank2
+			MsgBox, This text has been saved and now the Hotkey app will reload
+			Reload
+			}
+return
+}
+
+TextBank3()
+{
+    InputBox, TextBank3, TextBank3 Variable Changer, enter the new text here, , , 125, 
+		if ErrorLevel {
+		MsgBox, TextBank3 not updated. 
+		}
+			else {
+			IniWrite, %TextBank3%, data.dat, UserText, TextBank3
+			MsgBox, This text has been saved and now the Hotkey app will reload
+			Reload
+			}
+	return
+}
+
+GetPixelColour()
+{
+	MouseGetPos, MouseX, MouseY
+	PixelGetColor, colour, %MouseX%, %MouseY%
+	MsgBox, 4,, The colour at the current cursor position is %colour%. Would you like to copy this to the clipboard?
+		IfMsgBox Yes
+			Clipboard = %colour%
+			StringReplace, Clipboard, Clipboard, 0x,, All  ; finds all instances of 0x in the clipboard and removes them
+	return
+}
+
+VATabnPaste()
+{
+	Send {Tab up}{Tab down}{Tab up}{Right up}{Right down}{Right up}^v 	; Tab then Right Arrow then Paste
+	return
+}
+
+TripleCopy()
+{
+	ActivateWinUM:
+	MouseGetPos,,, WinUMID 				; Identify the window under the mouse cursor
+	WinActivate, ahk_id %WinUMID% 		; Activate the window under the mouse cursor
+	Send, {Right} 						; Press the right arrow
+	Click, 3 							; Click 3 times and select all under the cursor
+	Send, ^c 							; Copy
+	Return
+}
+
+UltraPaste()
+{
+	ActivateWinUM2:
+	MouseGetPos,,, WinUMID 				; Identify the window under the mouse cursor
+	WinActivate, ahk_id %WinUMID% 		; Activate the window under the mouse cursor
+	Click 								; Click once under the cursor
+	Send, ^v 							; Paste
+	Return
+}
+
+InitialsDate()
+{
+	FormatTime, CurrentDateTime,, ddMMyy 			; Prepare the DATE as DDMMYY
+	IniRead, Initials, data.dat, Initials, USER		; Sets the Users Initals
+	SendInput %Initials%%CurrentDateTime% 			;
+	return
+}
+
+HelpFunction()
+{
+	Gui, New,, Help Box,
+	Gui, Font, s12, Verdana
+	Gui, Add, Text,, Win+Z - Initials and DATE.
+	Gui, Add, Text,, Ctrl+Shift+C - activate window under mouse cursor, triple click, copy.
+	Gui, Add, Text,, Ctrl+Shift+V - Activate window under mouse cursor, click, paste.
+	Gui, Add, Text,, Ctrl+Alt+V - Tabs to next entry, then pastes, useful when checking VA invoices.
+	Gui, Add, Text,, Ctrl+Shift+F1 or F2 or F3 - Allows you to save up to 3 banks of text , dont go mad with it.
+	Gui, Add, Text,, Ctrl+Shift+F12 - Change USER initials.
+	Gui, Add, Text,, Ctrl+Shift+Middle Mouse Click - Shows Pixel Colour, and lets you choose to copy it to the clipboard.
+	Gui, Add, Text,, Win+Q - Goldmine Pending speedy tool, needs TextBank1 to have data in it.
+	Gui, Add, Button, Default w80, OK ; this is the OK button.
+	Gui, Show
+	return
+}
+
+AboutPage()
+{
+	IniRead, SMVersion, data.dat, Version, SMVersion
+	IniRead, Author, data.dat, Version, Author
+	IniRead, Creation, data.dat, Version, Creation
+	IniRead, Contact, data.dat, Version, Contact
+	IniRead, Email, data.dat, Version, Email	
+	Gui, Add, Picture, x22 y9 w100 h100 , C:\AHK\splash.png
+	Gui, Font, s14, Verdana
+	Gui, Add, Text, x162 y9 w290 h60 , The Sound Marketing Account Manager Hotkey Application
+	Gui, Font, s10, Verdana
+	Gui, Add, Text, x22 y119 w430 h30 , Created by %Author%
+	Gui, Add, Text, x22 y159 w430 h30 , Created on %Creation%
+	Gui, Add, Text, x22 y199 w430 h30 , UK Phone: %Contact%
+	Gui, Add, Text, x22 y239 w430 h30 , Email: %Email%
+	Gui, Font, s6, Verdana
+	Gui, Add, Text, x162 y79 w290 h30 , Software version %SMVersion%
+	Gui, Font, s10, Verdana
+	Gui, Add, Button, x187 y279 w100 h30 , OK ; this is the OK button.
+	
+	Gui, Show, x248 y148 h323 w479, New GUI Window
+	Return
+}
+
+SplashImageGUI(Picture, X, Y, Duration, Transparent = true)
+{
+	Gui, XPT99:Margin , 0, 0
+	Gui, XPT99:Add, Picture,, %Picture%
+	Gui, XPT99:Color, ECE9D8
+	Gui, XPT99:+LastFound -Caption +AlwaysOnTop +ToolWindow -Border
+		If Transparent
+			{
+			Winset, TransColor, ECE9D8
+			}
+	Gui, XPT99:Show, x%X% y%Y% NoActivate
+	SetTimer, DestroySplashGUI, -%Duration%
+	return
+
+	DestroySplashGUI:
+	Gui, XPT99:Destroy
+	return
+}
+
+GoldMinePending()
+{
+	FormatTime, CurrentDateTime,, ddMMyy 										; Prepare the DATE as DDMMYY
+	IniRead, Initials, data.dat, Initials, USER									; Sets the Users Initals from data.dat
+	IniRead, TextBank1, data.dat, UserText, TextBank1							; reads TextBank1 from data.dat
+	Send, {LWin up} 															;
+	MouseClick, right, 															;
+	Send, e 																	;
+	Send, {TAB}{TAB}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{Enter} ; SELECT THE PENDING TEXT BOX
+	SendInput %Initials%%CurrentDateTime% - %TextBank1% 						;
+	Send, {TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB} 								;
+	Send, {Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up} 		; Change PENDING COLOUR
+	Send, {TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB} 				;
+	Send, {Enter} 																;
+	return
+}
+
+TrayMenu()
+{
+Menu, Tray, Icon , icon.ico,
+Menu, Tray, NoStandard 							; removes the standard Menu items
+Menu, Tray, Add , Help, HELPFUNCTION 			; opens the Help GUI
+Menu, Tray, Add , About, AboutPage 				; opens the about page
+Menu, Tray, Add 
+Menu, Tray, Add , R&eload, Reeload 				; reload script button
+Menu, Tray, Add 
+Menu, Tray, Add , E&xit, ButtonExit 			; Exits the App
+Return
+}
