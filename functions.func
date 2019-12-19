@@ -62,38 +62,39 @@ TextBank3()
 GetPixelColour()
 {
 	MouseGetPos, MouseX, MouseY
-	PixelGetColor, colour, %MouseX%, %MouseY%
+	PixelGetColor, colour, %MouseX%, %MouseY%, slow
 	MsgBox, 4,, The colour at the current cursor position is %colour%. Would you like to copy this to the clipboard?
 		IfMsgBox Yes
 			Clipboard = %colour%
-			StringReplace, Clipboard, Clipboard, 0x,, All  ; finds all instances of 0x in the clipboard and removes them
+			StringReplace, Clipboard, Clipboard, 0x,, All  							; finds all instances of 0x in the clipboard and removes them
 	return
 }
 
 VATabnPaste()
 {
-	Send {Tab up}{Tab down}{Tab up}{Right up}{Right down}{Right up}^v 	; Tab then Right Arrow then Paste
+	Send {Tab up}{Tab down}{Tab up}{Right up}{Right down}{Right up}^v 				; Tab then Right Arrow then Paste
 	return
 }
 
 TripleCopy()
 {
 	ActivateWinUM:
-	MouseGetPos,,, WinUMID 				; Identify the window under the mouse cursor
-	WinActivate, ahk_id %WinUMID% 		; Activate the window under the mouse cursor
-	Send, {Right} 						; Press the right arrow
-	Click, 3 							; Click 3 times and select all under the cursor
-	Send, ^c 							; Copy
+	MouseGetPos,,, WinUMID 							; Identify the window under the mouse cursor
+	WinActivate, ahk_id %WinUMID% 					; Activate the window under the mouse cursor
+	Send, {Right} 									; Press the right arrow
+	Click, 3 										; Click 3 times and select all under the cursor
+	Send, ^c 										; Copy
 	Return
 }
 
 UltraPaste()
 {
 	ActivateWinUM2:
-	MouseGetPos,,, WinUMID 				; Identify the window under the mouse cursor
-	WinActivate, ahk_id %WinUMID% 		; Activate the window under the mouse cursor
-	Click 								; Click once under the cursor
-	Send, ^v 							; Paste
+	MouseGetPos,,, WinUMID 							; Identify the window under the mouse cursor
+	WinActivate, ahk_id %WinUMID% 					; Activate the window under the mouse cursor
+	Click,											; Click once under the cursor
+	Click,											; Click once under the cursor
+	Send, ^v 										; Paste
 	Return
 }
 
@@ -101,7 +102,7 @@ InitialsDate()
 {
 	FormatTime, CurrentDateTime,, ddMMyy 			; Prepare the DATE as DDMMYY
 	IniRead, Initials, data.dat, Initials, USER		; Sets the Users Initals
-	SendInput %Initials%%CurrentDateTime% 			;
+	SendInput %Initials%%CurrentDateTime% 			; Sends initials + currentdate
 	return
 }
 
@@ -109,14 +110,15 @@ HelpFunction()
 {
 	Gui, New,, Help Box,
 	Gui, Font, s12, Verdana
-	Gui, Add, Text,, Win+Z - Initials and DATE.
+	Gui, Add, Text,, Win+Z - Initials and CurrentDate.	
+	Gui, Add, Text,, Ctrl+Shift+Z - CurrentDate.
 	Gui, Add, Text,, Ctrl+Shift+C - activate window under mouse cursor, triple click, copy.
 	Gui, Add, Text,, Ctrl+Shift+V - Activate window under mouse cursor, click, paste.
 	Gui, Add, Text,, Ctrl+Alt+V - Tabs to next entry, then pastes, useful when checking VA invoices.
 	Gui, Add, Text,, Ctrl+Shift+F1 or F2 or F3 - Allows you to save up to 3 banks of text , dont go mad with it.
 	Gui, Add, Text,, Ctrl+Shift+F12 - Change USER initials.
 	Gui, Add, Text,, Ctrl+Shift+Middle Mouse Click - Shows Pixel Colour, and lets you choose to copy it to the clipboard.
-	Gui, Add, Text,, Win+Q - Goldmine Pending speedy tool, needs TextBank1 to have data in it.
+	Gui, Add, Text,, Ctrl+Shift+Q - Goldmine Pending speedy tool, needs TextBank1 to have data in it.
 	Gui, Add, Button, Default w80, OK ; this is the OK button.
 	Gui, Show
 	return
@@ -129,20 +131,18 @@ AboutPage()
 	IniRead, Creation, data.dat, Version, Creation
 	IniRead, Contact, data.dat, Version, Contact
 	IniRead, Email, data.dat, Version, Email	
-	Gui, Add, Picture, x22 y9 w100 h100 , C:\AHK\splash.png
+	Gui, Add, Picture, x12 y9 w150 h150 , C:\AHK\splash.png
 	Gui, Font, s14, Verdana
-	Gui, Add, Text, x162 y9 w290 h60 , The Sound Marketing Account Manager Hotkey Application
-	Gui, Font, s10, Verdana
-	Gui, Add, Text, x22 y119 w430 h30 , Created by %Author%
-	Gui, Add, Text, x22 y159 w430 h30 , Created on %Creation%
-	Gui, Add, Text, x22 y199 w430 h30 , UK Phone: %Contact%
-	Gui, Add, Text, x22 y239 w430 h30 , Email: %Email%
+	Gui, Add, Text, x172 y49 w190 h70 +Left, Sound Marketing Account Manager Hotkey Application
 	Gui, Font, s6, Verdana
-	Gui, Add, Text, x162 y79 w290 h30 , Software version %SMVersion%
+	Gui, Add, Text, x12 y249 w140 h10 +Left, Software version %SMVersion%
 	Gui, Font, s10, Verdana
-	Gui, Add, Button, x187 y279 w100 h30 , OK ; this is the OK button.
-	
-	Gui, Show, x248 y148 h323 w479, New GUI Window
+	Gui, Add, Text, x12 y169 w190 h20 +Left, Created by %Author%
+	Gui, Add, Text, x212 y169 w180 h20 +Left, Created on %Creation%
+	Gui, Add, Text, x12 y199 w190 h20 +Left, Phone: %Contact%
+	Gui, Add, Text, x212 y199 w180 h20 +Left, Email: %Email%
+	Gui, Add, Button, x292 y229 w100 h30 , OK
+	Gui, Show, x127 y87 h276 w410, New GUI Window
 	Return
 }
 
@@ -170,27 +170,41 @@ GoldMinePending()
 	FormatTime, CurrentDateTime,, ddMMyy 										; Prepare the DATE as DDMMYY
 	IniRead, Initials, data.dat, Initials, USER									; Sets the Users Initals from data.dat
 	IniRead, TextBank1, data.dat, UserText, TextBank1							; reads TextBank1 from data.dat
-	Send, {LWin up} 															;
-	MouseClick, right, 															;
-	Send, e 																	;
-	Send, {TAB}{TAB}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{Enter} ; SELECT THE PENDING TEXT BOX
-	SendInput %Initials%%CurrentDateTime% - %TextBank1% 						;
-	Send, {TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB} 								;
-	Send, {Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up} 		; Change PENDING COLOUR
-	Send, {TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB} 				;
-	Send, {Enter} 																;
+	MouseClick, right, 															; Right clicks once, opending the pendings context menu
+	Send, e 																	; presses e which opens the EDIT function in the context menu 
+	Send, {TAB}{TAB}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}		;
+	Send, {PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}	;
+	Send, {PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}	;
+	Send, {PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}	;
+	Send, {PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}	;
+	Send, {PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}	;
+	Send, {PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}	;
+	Send, {PgDn}	 															; Selects the pending text box and scrolls to the bottom
+	Send, {Enter}																; Creates a new line in the text box
+	SendInput, %Initials%%CurrentDateTime% - %TextBank1% 						; Enters the USER initials + currentdate and TextBank1
+	Send, {TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB} 								; Tabs through to the PENDING COLOUR picker
+	Send, {Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up} 		; Changes the PENDING COLOUR to Blue
+	Send, {TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB} 				; Tabs through to the OK button
+	Send, {Enter} 																; Presses the OK button
 	return
 }
 
 TrayMenu()
 {
-Menu, Tray, Icon , icon.ico,
-Menu, Tray, NoStandard 							; removes the standard Menu items
-Menu, Tray, Add , Help, HELPFUNCTION 			; opens the Help GUI
-Menu, Tray, Add , About, AboutPage 				; opens the about page
-Menu, Tray, Add 
-Menu, Tray, Add , R&eload, Reeload 				; reload script button
-Menu, Tray, Add 
-Menu, Tray, Add , E&xit, ButtonExit 			; Exits the App
-Return
+	Menu, Tray, Icon , icon.ico,
+	Menu, Tray, NoStandard 														; removes the standard Menu items
+	Menu, Tray, Add , Help, HELPFUNCTION 										; OPTION - opens the Help GUI
+	Menu, Tray, Add , About, AboutPage 											; OPTION - opens the about page
+	Menu, Tray, Add 															; Adds a divider
+	Menu, Tray, Add , R&eload, Reeload 											; OPTION - reload script button
+	Menu, Tray, Add 															; Adds a divider
+	Menu, Tray, Add , E&xit, ButtonExit 										; OPTION - Exits the App
+	Return
+}
+
+CurrentTime()
+{
+FormatTime, CurrentDateTime,, ddMMyy 										; Prepare the DATE as DDMMYY
+SendInput, %CurrentDateTime% 												; Sends todays date DDMMYY
+return
 }
