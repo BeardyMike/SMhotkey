@@ -76,13 +76,23 @@ return
 UltraPaste()
 return
 
-#z::				; Win+Z 						- Initials and the date e.g. MB010120
+#z::				; Win+Z 						- Initials and the CurrentDate e.g. MB010120
 InitialsDate()
 return
 
-#q::				; Win+Q							- Mouse over the pending in the GM Calendar then press Win+Q to enter TextBank1 into the pending field and change the pending colour to RED
++^q::				; Ctrl+Shift+Q					- Mouse over the pending in the GM Calendar then press Win+Q to enter TextBank1 into the pending field and change the pending colour to RED
 GoldMinePending()
 return
+
+#+z::				; Win+Shift+z					- CurrentDate
+CurrentTime()
+return
+
+
+
+
+
+
 
 
 
