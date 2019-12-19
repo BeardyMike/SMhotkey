@@ -86,7 +86,7 @@ return
 
 #+z::				; Win+Shift+z					- CurrentDate
 CurrentTime()
-return
+return 
 
 
 
