@@ -28,5 +28,8 @@ features that allow other people to adapt the code to suit their work styles.
 * Win+Q
   * Goldmine Pending speedy tool, needs TextBank1 to have data in it.
 
+## Installation
+This program and all it's files expect to be in C:\AHK and unless you go in and change this within the code... that's the way it is for now.
+
 ## License
 There isnt one. Use my code how ever you wish. Just mention me if you do use the code.
