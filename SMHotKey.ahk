@@ -7,14 +7,14 @@ SendMode Input  				; Recommended for new scripts due to its superior speed and 
 SetWorkingDir C:\AHK\ 			; Ensures a consistent starting directory.
 #SingleInstance force 			; Prevents mulitple instances from being run at the same time.
 
-#Include C:\AHK\functions.func 	; this is file that contains all the functions
+#Include C:\AHK\functions.ahk 	; this is file that contains all the functions
 
 ; VARIABLES
 FormatTime, CurrentDateTime,, ddMMyy 		; Prepare the DATE as DDMMYY
-IniRead, Initials, data.dat, Initials, USER	; Sets the Users Initals
-IniRead, Text1, data.dat, UserText, Text1	; prepares TextBank1 for use
-IniRead, Text2, data.dat, UserText, Text2	; prepares TextBank2 for use
-IniRead, Text3, data.dat, UserText, Text3	; prepares TextBank3 for use
+IniRead, Initials, data.ini, Initials, USER	; Sets the Users Initals
+IniRead, Text1, data.ini, UserText, Text1	; prepares TextBank1 for use
+IniRead, Text2, data.ini, UserText, Text2	; prepares TextBank2 for use
+IniRead, Text3, data.ini, UserText, Text3	; prepares TextBank3 for use
 USERDate = %Initials%%CurrentDateTime%		; example MB010170
 
 SplashImage = splash.png ; Locate the image
@@ -88,9 +88,9 @@ return
 CurrentTime()
 return 
 
-
-
-
+^$F7::				; Ctrl+F7						- Select all items, delete them, then move back one folder
+ScriptsFolderDelete()
+return
 
 
 
