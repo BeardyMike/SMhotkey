@@ -4,13 +4,13 @@ Functions can be found in this file.
 
 USERinitials()
 {
-	IniRead, Initials, data.dat, Initials, USER	; Sets the Users Initals
+	IniRead, Initials, data.ini, Initials, USER	; Sets the Users Initals
     InputBox, USER, USERinitials Variable Changer, enter your initials here e.g. MB, , , 125,
 		if ErrorLevel {
 		MsgBox, Initials have been left as '%Initials%'
 		}
 			else {
-			IniWrite, %USER%, data.dat, Initials, USER
+			IniWrite, %USER%, data.ini, Initials, USER
 			MsgBox, Your Initials have been saved and now the Hotkey app will reload
 			Reload
 			}
@@ -24,7 +24,7 @@ TextBank1()
 		MsgBox, TextBank1 not updated. 
 		}
 			else {
-			IniWrite, %TextBank1%, data.dat, UserText, TextBank1
+			IniWrite, %TextBank1%, data.ini, UserText, TextBank1
 			MsgBox, This text has been saved and now the Hotkey app will reload
 			Reload
 			}
@@ -38,7 +38,7 @@ TextBank2()
 		MsgBox, TextBank2 not updated. 
 		}
 			else {
-			IniWrite, %TextBank2%, data.dat, UserText, TextBank2
+			IniWrite, %TextBank2%, data.ini, UserText, TextBank2
 			MsgBox, This text has been saved and now the Hotkey app will reload
 			Reload
 			}
@@ -52,7 +52,7 @@ TextBank3()
 		MsgBox, TextBank3 not updated. 
 		}
 			else {
-			IniWrite, %TextBank3%, data.dat, UserText, TextBank3
+			IniWrite, %TextBank3%, data.ini, UserText, TextBank3
 			MsgBox, This text has been saved and now the Hotkey app will reload
 			Reload
 			}
@@ -101,7 +101,7 @@ UltraPaste()
 InitialsDate()
 {
 	FormatTime, CurrentDateTime,, ddMMyy 			; Prepare the DATE as DDMMYY
-	IniRead, Initials, data.dat, Initials, USER		; Sets the Users Initals
+	IniRead, Initials, data.ini, Initials, USER		; Sets the Users Initals
 	SendInput %Initials%%CurrentDateTime% 			; Sends initials + currentdate
 	return
 }
@@ -119,18 +119,19 @@ HelpFunction()
 	Gui, Add, Text,, Ctrl+Shift+F12 - Change USER initials.
 	Gui, Add, Text,, Ctrl+Shift+Middle Mouse Click - Shows Pixel Colour, and lets you choose to copy it to the clipboard.
 	Gui, Add, Text,, Ctrl+Shift+Q - Goldmine Pending speedy tool, needs TextBank1 to have data in it.
-	Gui, Add, Button, Default w80, OK ; this is the OK button.
+	Gui, Add, Text,, Ctrl+F7	- Select all items, delete them, then move back one folder.
+	Gui, Add, Button, Default w80, OK
 	Gui, Show
 	return
 }
 
 AboutPage()
 {
-	IniRead, SMVersion, data.dat, Version, SMVersion
-	IniRead, Author, data.dat, Version, Author
-	IniRead, Creation, data.dat, Version, Creation
-	IniRead, Contact, data.dat, Version, Contact
-	IniRead, Email, data.dat, Version, Email	
+	IniRead, SMVersion, data.ini, Version, SMVersion 							; Reads the SMVersion value from the data.ini
+	IniRead, Author, data.ini, Version, Author 									; Reads the Author value from the data.ini
+	IniRead, Creation, data.ini, Version, Creation								; Reads the Creation value from the data.ini
+	IniRead, Contact, data.ini, Version, Contact								; Reads the Contact value from the data.ini
+	IniRead, Email, data.ini, Version, Email									; Reads the Email Value from the data.ini
 	Gui, Add, Picture, x12 y9 w150 h150 , C:\AHK\splash.png
 	Gui, Font, s14, Verdana
 	Gui, Add, Text, x172 y49 w190 h70 +Left, Sound Marketing Account Manager Hotkey Application
@@ -168,23 +169,17 @@ SplashImageGUI(Picture, X, Y, Duration, Transparent = true)
 GoldMinePending()
 {
 	FormatTime, CurrentDateTime,, ddMMyy 										; Prepare the DATE as DDMMYY
-	IniRead, Initials, data.dat, Initials, USER									; Sets the Users Initals from data.dat
-	IniRead, TextBank1, data.dat, UserText, TextBank1							; reads TextBank1 from data.dat
+	IniRead, Initials, data.ini, Initials, USER									; Sets the Users Initals from data.ini
+	IniRead, TextBank1, data.ini, UserText, TextBank1							; reads TextBank1 from data.ini
 	MouseClick, right, 															; Right clicks once, opending the pendings context menu
 	Send, e 																	; presses e which opens the EDIT function in the context menu 
-	Send, {TAB}{TAB}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}		;
-	Send, {PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}	;
-	Send, {PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}	;
-	Send, {PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}	;
-	Send, {PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}	;
-	Send, {PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}	;
-	Send, {PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}{PgDn}	;
-	Send, {PgDn}	 															; Selects the pending text box and scrolls to the bottom
+	Send, {TAB 2}																;
+	Send, {PgDn 78}																; Selects the pending text box and scrolls to the bottom
 	Send, {Enter}																; Creates a new line in the text box
 	SendInput, %Initials%%CurrentDateTime% - %TextBank1% 						; Enters the USER initials + currentdate and TextBank1
-	Send, {TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB} 								; Tabs through to the PENDING COLOUR picker
-	Send, {Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up}{Up} 		; Changes the PENDING COLOUR to Blue
-	Send, {TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB}{TAB} 				; Tabs through to the OK button
+	Send, {TAB 8}																; Tabs through to the PENDING COLOUR picker
+	Send, {Up 16}														 		; Changes the PENDING COLOUR to Blue
+	Send, {TAB 11}																; Tabs through to the OK button
 	Send, {Enter} 																; Presses the OK button
 	return
 }
@@ -204,7 +199,24 @@ TrayMenu()
 
 CurrentTime()
 {
-FormatTime, CurrentDateTime,, ddMMyy 										; Prepare the DATE as DDMMYY
-SendInput, %CurrentDateTime% 												; Sends todays date DDMMYY
+FormatTime, CurrentDateTime,, ddMMyy 											; Prepare the DATE as DDMMYY
+SendInput, %CurrentDateTime% 													; Sends todays date DDMMYY
+return
+}
+
+ScriptsFolderDelete()
+{
+Send ^a 																		; Select All
+sleep, 50																		; Sleep for 50ms
+Send {delete}																	; Delete all items selected
+sleep, 100																		; Sleep for 50ms
+IfWinExist, Delete File,
+ControlClick, Button1, Delete File,		
+sleep, 50												
+IfWinExist, Delete Multiple Items,
+ControlClick, Button1, Delete Multiple Items,	
+; Send y																		; Confirm Deletion
+sleep, 50																		; Sleep for 50ms
+Send {backspace}																; Move back to previous folder
 return
 }
