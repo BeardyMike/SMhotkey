@@ -28,7 +28,10 @@ This is the AutoHotKey (.ahk) I use for my office PC. It's not going to have any
   * Goldmine Pending speedy tool, needs TextBank1 to have data in it.
   
 * Ctrl+Shift+Z
-  * types the CurrentDate
+  * Types the CurrentDate.
+
+* Ctrl+F7
+  *  Select all items, delete them, then move up in the directory.
 
 ## Installation
 This program and all it's files expect to be in C:\AHK and unless you go in and change this within the code... that's the way it is for now.
