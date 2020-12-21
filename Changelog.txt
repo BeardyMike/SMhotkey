@@ -1,0 +1,21 @@
+Version 1.0
+------------ 
+Added TextBank 1, 2, 3, in the data.ini file
+Added the Functions.func file to hold all the functions, so the main AHK file is neater and easier to follow.
+
+Verison 1.01
+------------ 
+Added 100's of comments, so the code can be easily maintained.
+Added an EXE version of the AHK so that it can be easily shared.
+New functions added for Voice Artist Invoice management.
+Colour Picker added.
+
+Version 1.02
+------------ 
+Colour Picker removed as Windows 1902 breaks its ability to accuratly see through Alpha channel data.
+Security Tokens added.
+Server Verification Added.
+User credentials are now USER customisable
+TextBanks are fully editable.
+ABOUT and HELP pages added to the TrayMenu
+Framework for GUI's implemented, next update should include more GUI elements.
